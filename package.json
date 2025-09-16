@@ -33,17 +33,17 @@
     "typescript",
     "nodejs"
   ],
-  "author": "ccr-update contributors",
+  "author": "ccr-model-manager contributors",
   "license": "MIT",
   "packageManager": "pnpm@10.11.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/ccr-update.git"
+    "url": "git+https://github.com/yourusername/ccr-model-manager.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/ccr-update/issues"
+    "url": "https://github.com/yourusername/ccr-model-manager/issues"
   },
-  "homepage": "https://github.com/yourusername/ccr-update#readme",
+  "homepage": "https://github.com/yourusername/ccr-model-manager#readme",
   "engines": {
     "node": ">=18.0.0"
   }

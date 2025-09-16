@@ -20,8 +20,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/ccr-update.git
-cd ccr-update
+git clone https://github.com/yourusername/ccr-model-manager.git
+cd ccr-model-manager
 
 # 安装依赖
 pnpm install
@@ -129,7 +129,7 @@ pnpm run build
 ## 项目结构
 
 ```
-ccr-update/
+ccr-model-manager/
 ├── src/
 │   ├── index.ts      # 主入口文件
 │   └── types.ts      # TypeScript 类型定义
