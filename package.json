@@ -1,6 +1,6 @@
 {
   "name": "ccr-model-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A command-line tool for managing Claude Code Router (CCR) model configurations with interactive selection",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
