@@ -1,0 +1,50 @@
+{
+  "name": "ccr-model-manager",
+  "version": "1.0.0",
+  "description": "A command-line tool for managing Claude Code Router (CCR) model configurations with interactive selection",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "bin": {
+    "cmm": "./dist/index.js"
+  },
+  "devDependencies": {
+    "tsdown": "^0.15.1",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "@types/inquirer": "^9.0.0",
+    "@types/fs-extra": "^11.0.0"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "inquirer": "^9.2.0",
+    "chalk": "^5.3.0",
+    "fs-extra": "^11.1.0"
+  },
+  "keywords": [
+    "claude",
+    "code-router",
+    "cli",
+    "model-selection",
+    "typescript",
+    "nodejs"
+  ],
+  "author": "ccr-update contributors",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/ccr-update.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/ccr-update/issues"
+  },
+  "homepage": "https://github.com/yourusername/ccr-update#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
