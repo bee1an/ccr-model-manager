@@ -119,16 +119,13 @@ program
       // 重启CCR
       console.log(chalk.blue('正在重启CCR...'));
       try {
-        execSync('pkill -f ccr', { stdio: 'inherit' });
-        console.log(chalk.green('CCR已停止'));
-        
-        // 假设ccr命令在PATH中
-        execSync('ccr &', { stdio: 'inherit' });
+        // 使用ccr restart命令重启CCR
+        execSync('ccr restart', { stdio: 'inherit' });
         console.log(chalk.green('CCR已重新启动'));
       } catch (error) {
         console.log(chalk.yellow('无法自动重启CCR，请手动重启'));
         console.log(chalk.yellow('您可以使用以下命令手动重启:'));
-        console.log(chalk.yellow('pkill -f ccr && ccr &'));
+        console.log(chalk.yellow('ccr restart'));
       }
       
       console.log(chalk.green('操作完成!'));
