@@ -34,7 +34,7 @@
     "nodejs"
   ],
   "author": "ccr-update contributors",
-  "license": "ISC",
+  "license": "MIT",
   "packageManager": "pnpm@10.11.0",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 # CCR 模型管理器
 
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 
@@ -113,8 +113,8 @@ cmm select
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/ccr-update.git
-cd ccr-update
+git clone https://github.com/yourusername/ccr-model-manager.git
+cd ccr-model-manager
 
 # 安装依赖
 pnpm install
@@ -152,11 +152,7 @@ ccr-update/
 
 ## 许可证
 
-本项目采用 [ISC 许可证](LICENSE) - 查看 [LICENSE](LICENSE) 文件了解详情。
-
-## 作者
-
-- ccr-update contributors
+本项目采用 [MIT 许可证](LICENSE) - 查看 [LICENSE](LICENSE) 文件了解详情。
 
 ## 致谢
 
