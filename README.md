@@ -20,7 +20,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/ccr-model-manager.git
+git clone https://github.com/bee1an/ccr-model-manager.git
 cd ccr-model-manager
 
 # 安装依赖
@@ -113,7 +113,7 @@ cmm select
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/ccr-model-manager.git
+git clone https://github.com/bee1an/ccr-model-manager.git
 cd ccr-model-manager
 
 # 安装依赖

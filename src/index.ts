@@ -99,19 +99,65 @@ program
       
       console.log(chalk.blue(`您选择了: ${selectedProvider} - ${selectedModel}`));
       
+      // 第三步：选择要更新的路由模式
+      // 创建路由选项并默认全选
+      const routeOptions = [
+        {
+          name: `默认路由 (当前: ${config.Router.default})`,
+          value: 'default',
+          checked: true  // 默认选中
+        },
+        {
+          name: `背景路由 (当前: ${config.Router.background})`,
+          value: 'background',
+          checked: true  // 默认选中
+        },
+        {
+          name: `思考路由 (当前: ${config.Router.think})`,
+          value: 'think',
+          checked: true  // 默认选中
+        },
+        {
+          name: `长上下文路由 (当前: ${config.Router.longContext})`,
+          value: 'longContext',
+          checked: true  // 默认选中
+        },
+        {
+          name: `网页搜索路由 (当前: ${config.Router.webSearch})`,
+          value: 'webSearch',
+          checked: true  // 默认选中
+        }
+      ];
+      
+      const { selectedRoutes } = await inquirer.prompt([
+        {
+          type: 'checkbox',
+          name: 'selectedRoutes',
+          message: '请选择要更新的路由模式（可多选）:',
+          choices: routeOptions,
+          validate: (answers: string[]) => {
+            if (answers.length === 0) {
+              return '请至少选择一个路由模式';
+            }
+            return true;
+          }
+        }
+      ]);
+      
       // 更新配置文件
-      // 更新Router配置中的默认提供商和模型
+      // 只更新用户选择的路由模式
       const updatedConfig = {
         ...config,
         Router: {
-          ...config.Router,
-          default: `${selectedProvider},${selectedModel}`,
-          background: `${selectedProvider},${selectedModel}`,
-          think: `${selectedProvider},${selectedModel}`,
-          longContext: `${selectedProvider},${selectedModel}`,
-          webSearch: `${selectedProvider},${selectedModel}`
+          ...config.Router
         }
       };
+      
+      // 为每个选定的路由设置新的提供商和模型
+      const modelConfig = `${selectedProvider},${selectedModel}`;
+      selectedRoutes.forEach((route: string) => {
+        updatedConfig.Router[route as keyof typeof updatedConfig.Router] = modelConfig;
+      });
       
       await fs.writeJson(configPath, updatedConfig, { spaces: 2 });
       console.log(chalk.green('配置文件已更新'));
