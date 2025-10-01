@@ -186,31 +186,31 @@ program
   .action(async () => {
     try {
       console.log(chalk.blue('正在读取CCR配置文件...'));
-      
+
       const configPath = path.join(process.env.HOME || '', '.claude-code-router', 'config.json');
-      
+
       if (!await fs.pathExists(configPath)) {
         console.log(chalk.red('CCR配置文件不存在，请确保CCR已正确安装并配置'));
         return;
       }
-      
+
       const config: CCRConfig = await fs.readJson(configPath);
       const providers: Provider[] = config.Providers || [];
-      
+
       if (providers.length === 0) {
         console.log(chalk.red('未找到任何模型提供商配置'));
         return;
       }
-      
+
       console.log(chalk.green('可用的模型提供商和模型ID:'));
       console.log('');
-      
+
       providers.forEach(provider => {
         // 跳过已弃用的提供商
         if (provider.deprecated) return;
-        
+
         console.log(chalk.yellow(`提供商: ${provider.name}`));
-        
+
         if (provider.models && provider.models.length > 0) {
           provider.models.forEach(model => {
             console.log(`  - ${model}`);
@@ -220,7 +220,7 @@ program
         }
         console.log('');
       });
-      
+
       // 显示当前选择的提供商和模型
       if (config.Router && config.Router.default) {
         const [currentProvider, currentModel] = config.Router.default.split(',');
@@ -230,5 +230,129 @@ program
       console.error(chalk.red('发生错误:'), error);
     }
   });
+
+program
+  .command('routers')
+  .description('查看当前CCR所有router对应的模型信息')
+  .action(async () => {
+    await displayRouterModels();
+  });
+
+async function displayRouterModels() {
+  try {
+    console.log(chalk.blue('正在读取CCR配置文件...'));
+
+    const configPath = path.join(process.env.HOME || '', '.claude-code-router', 'config.json');
+
+    if (!await fs.pathExists(configPath)) {
+      console.log(chalk.red('CCR配置文件不存在，请确保CCR已正确安装并配置'));
+      return;
+    }
+
+    const config: CCRConfig = await fs.readJson(configPath);
+    const providers: Provider[] = config.Providers || [];
+
+    if (providers.length === 0) {
+      console.log(chalk.red('未找到任何模型提供商配置'));
+      return;
+    }
+
+    if (!config.Router) {
+      console.log(chalk.red('未找到Router配置'));
+      return;
+    }
+
+    // 解析router配置
+    const routerConfigs = [
+      { type: 'default', value: config.Router.default },
+      { type: 'background', value: config.Router.background },
+      { type: 'think', value: config.Router.think },
+      { type: 'longContext', value: config.Router.longContext },
+      { type: 'webSearch', value: config.Router.webSearch }
+    ];
+
+    // 显示表格标题
+    console.log(chalk.green('当前 CCR Router 配置'));
+    console.log('');
+
+    // 表格头部 - 根据实际数据调整列宽
+    const header = '┌─────────────┬────────────────────────────┬─────────────────────┬──────────────┐';
+    const separator = '├─────────────┼────────────────────────────┼─────────────────────┼──────────────┤';
+    const footer = '└─────────────┴────────────────────────────┴─────────────────────┴──────────────┘';
+
+    console.log(header);
+    console.log('│ Router Type │ Provider                  │ Model               │ Status       │');
+    console.log(separator);
+
+    // 处理每个router配置
+    routerConfigs.forEach(router => {
+      if (!router.value) {
+        // 空配置处理
+        console.log(`│ ${chalk.gray('未配置'.padEnd(11))} │ ${chalk.gray('-'.padEnd(28))} │ ${chalk.gray('-'.padEnd(19))} │ ${chalk.red('未配置').padEnd(12)} │`);
+        return;
+      }
+
+      // 解析 provider:model 格式
+      const [providerName, modelName] = router.value.split(',');
+
+      if (!providerName || !modelName) {
+        // 格式错误处理
+        console.log(`│ ${chalk.yellow(router.type.padEnd(11))} │ ${chalk.red('格式错误'.padEnd(28))} │ ${chalk.red(router.value.padEnd(19))} │ ${chalk.red('错误').padEnd(12)} │`);
+        return;
+      }
+
+      // 查找provider信息
+      const provider = providers.find(p => p.name === providerName);
+
+      if (!provider) {
+        // provider不存在
+        console.log(`│ ${chalk.yellow(router.type.padEnd(11))} │ ${chalk.red('未知提供商'.padEnd(28))} │ ${chalk.gray(modelName.padEnd(19))} │ ${chalk.red('错误').padEnd(12)} │`);
+        return;
+      }
+
+      // 检查provider状态
+      const isProviderDeprecated = provider.deprecated;
+
+      // 检查model是否在provider的models列表中
+      const isModelAvailable = provider.models && provider.models.includes(modelName);
+
+      // 确定状态和颜色
+      let statusText = '🟢 Active';
+      let statusColor = chalk.green;
+      let providerColor = chalk.white;
+      let modelColor = chalk.white;
+
+      if (isProviderDeprecated) {
+        statusText = '🟡 Deprecated';
+        statusColor = chalk.yellow;
+        providerColor = chalk.yellow;
+      } else if (!isModelAvailable) {
+        statusText = '🔴 未知模型';
+        statusColor = chalk.red;
+        modelColor = chalk.red;
+      }
+
+      // 输出表格行
+      console.log(`│ ${providerColor(router.type.padEnd(11))} │ ${providerColor(providerName.padEnd(28))} │ ${modelColor(modelName.padEnd(19))} │ ${statusColor(statusText.padEnd(12))} │`);
+    });
+
+    console.log(footer);
+    console.log('');
+
+    // 显示统计信息
+    const totalRouters = routerConfigs.length;
+    const configuredRouters = routerConfigs.filter(r => r.value).length;
+    const activeProviders = new Set(routerConfigs
+      .filter(r => r.value)
+      .map(r => r.value.split(',')[0])
+      .filter(name => providers.find(p => p.name === name && !p.deprecated))
+    ).size;
+
+    console.log(chalk.blue(`总计: ${configuredRouters}/${totalRouters} 路由已配置, ${activeProviders} 个活跃提供商`));
+
+  } catch (error) {
+    console.error(chalk.red('发生错误:'), error);
+  }
+}
 
 program.parse();
