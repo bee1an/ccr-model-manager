@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { ConfigService } from '../services/config';
 import { FormatUtils } from '../utils/format';
 import { UI_MESSAGES, ERROR_MESSAGES } from '../utils/constants';

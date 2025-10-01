@@ -306,4 +306,12 @@ export class FormatUtils {
   static showWarning(message: string): void {
     console.log(chalk.yellow(message));
   }
+
+  /**
+   * 显示信息文本
+   * @param message 信息文本
+   */
+  static showInfo(message: string): void {
+    console.log(chalk.blue(message));
+  }
 }
